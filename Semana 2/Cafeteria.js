@@ -1,128 +1,76 @@
 //devuelve un arreglo de ventas con producto y precio.producto en minusculas sin acentos ni espacios sobrantes precio numerico mayor que cero se descarta lo vacio o invalido 
-const registro ="Café: 35.50; té verde: 28 ;Pan Dulce:18.5; CAFÉ:35.5; galleta de avena: 22.10; Té Verde:28 ; Jugo de naranja: 40; pan dulce : 18.50; Café Americano: abc; galleta de avena:22.1; Jugo de Naranja:40 ; Sándwich:55.75; té verde: -10; ;15; Pan dulce:18.5; Café:35.5 ; Sándwich: 55.75 ; galleta de avena:";
+const registro = "Café: 35.50; té verde: 28 ;Pan Dulce:18.5; CAFÉ:35.5; galleta de avena: 22.10; Té Verde:28 ; Jugo de naranja: 40; pan dulce : 18.50; Café Americano: abc; galleta de avena:22.1; Jugo de Naranja:40 ; Sándwich:55.75; té verde: -10; ;15; Pan dulce:18.5; Café:35.5 ; Sándwich: 55.75 ; galleta de avena:";
 
 function limpiarRegistros(texto) 
 {
-    let nuevosRegistros=texto.toLowerCase().split(";").map(p => p.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')).filter(p => p !=="")
-    let registrosValidos = nuevosRegistros.filter(p => !isNaN(parseFloat(p.split(":")[1])) && parseFloat(p.split(":")[1]) >= 0)
-    return nuevosRegistros,registrosValidos
-}
-console.table(limpiarRegistros(registro))
+    const ventas = [];
 
-
-
-function sumar(...precios)
-{
-    let suma = precios.reduce((acum, precio) => acum + precio, 0)
-    return Number(suma.toFixed(2))  
-}
-let registrosValidos = limpiarRegistros(registro)
-
-let precios = registrosValidos.map(r => parseFloat(r.split(":")[1]))
-
-console.table(precios)
-
-console.log("Total:", sumar(...precios).toFixed(2))
-
-
-
-function resumenPorProducto(ventas)
-{
-    let resumen = {};
-
-    ventas.forEach((venta) =>
+    for (const parte of texto.split(";")) 
     {
-        let [producto, precio] = venta.split(":");
+        const [nombre, valor] = parte.split(":");
+        const producto = nombre.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const precio = parseFloat(valor);
 
-        producto = producto.trim();
-        precio = parseFloat(precio);
-
-        if (!resumen[producto])
+        if (producto && precio >= 0) 
         {
-            resumen[producto] =
-            {
-                veces: 0,
-                total: 0
-            };
+            ventas.push({ producto, precio });
         }
+    }
 
+    return ventas;
+}
+
+function sumar(precios) 
+{
+    let total = 0;
+    for (const precio of precios) 
+    {
+        total += precio;
+    }
+    return total;
+}
+
+
+function resumenPorProducto(ventas) {
+    const resumen = {};
+
+    for (const { producto, precio } of ventas) 
+    {
+        if (!resumen[producto]) 
+        {
+            resumen[producto] = { veces: 0, total: 0 };
+        }
         resumen[producto].veces++;
         resumen[producto].total += precio;
-    });
+    }
 
-    return Object.entries(resumen)
-        .sort((a, b) =>
-        {
-            if (b[1].total !== a[1].total)
-            {
-                return b[1].total - a[1].total;
-            }
-
-            return a[0].localeCompare(b[0], "es");
-        })
-        .map(([producto, datos]) => ({
-            producto,
-            veces: datos.veces,
-            total: Number(datos.total.toFixed(2))
-        }));
+    return resumen;
 }
-console.log("Resumen por producto:");
 
-console.table(resumenPorProducto(registrosValidos));
-
-
-function descuento(precio, porcentaje = 15)
+function descuento(precio, porcentaje = 15) 
 {
-    return Number((precio - (precio * porcentaje / 100)).toFixed(2));
+    return precio * (1 - porcentaje / 100);
 }
 
-
-
-function aplicarATodos(lista, fn)
+function productoAlAzar(productos) 
 {
-    return lista.map(fn);
+    return productos[Math.floor(Math.random() * productos.length)];
 }
 
 
-// Obtener precios de los productos
-let preciosPro = registrosValidos.map(r => Number(parseFloat(r.split(":")[1]).toFixed(2)))
+const ventas = limpiarRegistros(registro);
+const precios = ventas.map(v => v.precio);
+const resumen = resumenPorProducto(ventas);
 
-console.log("Precios originales:");
-console.table(preciosPro);
-
-// Aplica el descuento del 15%
-let preciosConDescuento = aplicarATodos(preciosPro, descuento);
-
-console.log("Precios con descuento:");
-console.table(preciosConDescuento);
-
-
-
-function productoAlAzar(ventas)
-{
-    let productos = [...new Set(
-        ventas.map(venta => venta.split(":")[0].trim())
-    )];
-
-    let indice = Math.floor(Math.random() * productos.length);
-
-    return productos[indice];
-}
-
-
-
-
-let resumen = resumenPorProducto(registrosValidos);
-let promocion = productoAlAzar(registrosValidos);
+console.table(ventas);
 
 console.log("=== REPORTE FINAL ===");
-
-resumen.forEach((producto) =>
+for (const producto in resumen) 
 {
-    console.log(
-        `${producto.producto} | vendidas: ${producto.veces} | ingreso: $${producto.total.toFixed(2)}`
-    );
-});
+    const { veces, total } = resumen[producto];
+    console.table(`${producto} | vendidas: ${veces} | ingreso: $${total.toFixed(2)}`);
+}
 
-console.log(`Total general: $${sumar(...precios).toFixed(2)}`);
-console.log(`Producto de la promoción: ${promocion}`);
+console.log(`Total general: $${sumar(precios).toFixed(2)}`);
+console.log("Precios con descuento:", precios.map(p => descuento(p).toFixed(2)));
+console.log(`Producto de la promoción: ${productoAlAzar(Object.keys(resumen))}`);
