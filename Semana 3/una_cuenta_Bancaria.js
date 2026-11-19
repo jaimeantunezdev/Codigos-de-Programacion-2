@@ -21,7 +21,7 @@ function crearCuentaBancaria(saldo)
 
 const c = crearCuentaBancaria(100);
 
-console.log(c.depositar(100),c.retirar(50),c.consultar()); 
+console.log(c.depositar(100),c.retirar(300),c.consultar()); 
 
 
 /*
