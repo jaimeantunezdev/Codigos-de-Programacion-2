@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playground · DOM y eventos</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+  <header class="barra">
+    <p class="marca">Programación 2 · Playground de DOM y eventos</p>
+    <p class="ayuda">
+      Escribe tu código en <b>app.js</b> (dentro de los bloques de cada ejercicio) y mira el resultado aquí.
+      Abre la consola con <b>F12</b>. Esta página usa Live Server: guarda el archivo y se recarga sola.
+      Todo lo que cambies en el DOM se pierde al recargar, y eso es lo esperado.
+    </p>
+    <nav class="indice">
+      <a href="#base">Página base</a>
+      <a href="#contador">Contador, tema y detalle</a>
+      <a href="#validacion">Validación</a>
+      <a href="#lista-dinamica">Lista dinámica</a>
+      <a href="#laboratorio">Laboratorio</a>
+      <a href="#escenario">Zona libre</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ===================================================== -->
+    <!-- PÁGINA BASE: es el HTML de las diapositivas de la semana. -->
+    <!-- Conserva el orden y los ids: los ejemplos dependen de ellos. -->
+    <!-- ===================================================== -->
+    <section class="zona" id="base">
+      <h2 class="zona-titulo">Página base · lecciones 4.1 a 4.5</h2>
+      <p class="nota">Los ejemplos de las diapositivas funcionan tal cual sobre estos elementos. No cambies su orden ni sus ids.</p>
+      <div class="base">
+        <h1 id="titulo">Hola</h1>
+        <ul id="lista">
+          <li>Uno</li>
+          <li class="activo">Dos</li>
+          <li>Tres</li>
+        </ul>
+        <form id="formulario">
+          <input id="nombre" type="text" value="Ana">
+          <input id="acepto" type="checkbox">
+          <button id="btn" type="button">Enviar</button>
+        </form>
+        <div id="caja" class="tarjeta"></div>
+        <p id="salida"></p>
+        <a id="enlace" href="https://example.com">Sitio</a>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- TALLER DE EVENTOS Y CLASES (jueves)                    -->
+    <!-- ===================================================== -->
+    <section class="zona" id="contador">
+      <h2 class="zona-titulo">Contador, tema y detalle</h2>
+      <p class="nota">Taller del jueves. Los botones no hacen nada todavía: tú escribes el comportamiento en app.js.</p>
+
+      <div class="fila">
+        <button id="menos" type="button">−</button>
+        <p id="num" class="numero">0</p>
+        <button id="mas" type="button">+</button>
+      </div>
+
+      <div class="fila">
+        <button id="tema" type="button">Cambiar tema</button>
+      </div>
+
+      <div class="fila">
+        <button id="det" type="button">Mostrar</button>
+        <p id="detalle" hidden>Este párrafo estaba oculto con el atributo hidden.</p>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- TALLER DE VALIDACIÓN (viernes)                         -->
+    <!-- ===================================================== -->
+    <section class="zona" id="validacion">
+      <h2 class="zona-titulo">Formulario con validación</h2>
+      <p class="nota">Taller del viernes: nombre y edad. Los mensajes van en el párrafo de abajo.</p>
+      <form id="reg" class="formulario">
+        <label for="reg-nombre">Nombre</label>
+        <input id="reg-nombre" type="text" autocomplete="off">
+        <label for="reg-edad">Edad</label>
+        <input id="reg-edad" type="text" inputmode="numeric" autocomplete="off">
+        <button type="submit">Enviar</button>
+      </form>
+      <p id="mensaje" class="mensaje"></p>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- TALLER DE LISTA DINÁMICA (base de la Tarea 4)          -->
+    <!-- ===================================================== -->
+    <section class="zona" id="lista-dinamica">
+      <h2 class="zona-titulo">Lista dinámica</h2>
+      <p class="nota">Paso 1 del taller ya hecho: la estructura. Para la Tarea 4 vas a armar la tuya en tu propio repositorio.</p>
+      <div class="fila">
+        <input id="nuevo" type="text" placeholder="Nueva tarea" autocomplete="off">
+        <button id="agregar" type="button">Agregar</button>
+      </div>
+      <p id="aviso" class="mensaje"></p>
+      <ul id="tareas" class="tareas"></ul>
+      <p id="pend" class="nota"></p>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- RETO: EL LABORATORIO EN PANTALLA                       -->
+    <!-- ===================================================== -->
+    <section class="zona" id="laboratorio">
+      <h2 class="zona-titulo">Reto · El laboratorio, ahora en pantalla</h2>
+      <p class="nota">Estructura de partida. Si prefieres diseñar tu propia página, bórrala y haz la tuya.</p>
+      <form id="lab-form" class="fila">
+        <input id="matricula" type="text" placeholder="Matrícula de 7 dígitos" autocomplete="off">
+        <button type="submit">Registrar entrada</button>
+      </form>
+      <p id="lab-msg" class="mensaje"></p>
+      <p class="nota">Dentro: <span id="lab-cont" class="contador">0 / 12</span></p>
+      <ul id="dentro" class="tareas"></ul>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- ZONA LIBRE: para crear nodos sin tocar lo demás        -->
+    <!-- ===================================================== -->
+    <section class="zona" id="escenario">
+      <h2 class="zona-titulo">Zona libre</h2>
+      <p class="nota">Un espacio vacío para practicar createElement, append, tablas y fragmentos.</p>
+      <div id="libre"></div>
+      <div id="tabla-destino"></div>
+    </section>
+
+  </main>
+
+  <!-- defer: el script corre cuando el HTML ya fue leído, así que los elementos ya existen -->
+  <script src="app.js" defer></script>
+</body>
+</html>
